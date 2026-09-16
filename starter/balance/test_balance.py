@@ -17,6 +17,10 @@ class TestBalance(unittest.TestCase):
         balance2 = Balance.get_instance()
         self.assertIs(balance1, balance2)
 
+    def test_direct_instantiation_blocked(self):
+        with self.assertRaises(RuntimeError):
+            Balance()
+
     def test_add_income(self):
         self.balance.add_income(100)
         self.assertEqual(self.balance.get_balance(), 100)

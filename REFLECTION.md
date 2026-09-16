@@ -11,6 +11,9 @@ transaction, and the `main.py` demo script all read and write through that same 
 **Why it fits:** a finance app with two different "current balances" floating around
 is a correctness bug waiting to happen. Singleton makes "there is exactly one balance"
 a guarantee enforced by the class itself, not a convention callers have to remember.
+`__new__` is overridden to reject direct `Balance()` calls (it only allows construction
+while `get_instance()` is running), so the guarantee holds even against code that tries
+to bypass `get_instance()`, not just code that cooperates with it.
 
 **Trade-off:** Singletons introduce global mutable state, which makes tests order-
 dependent unless you're careful. Every test in `test_balance.py` and

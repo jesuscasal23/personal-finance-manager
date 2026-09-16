@@ -7,6 +7,14 @@ class Balance:
     """Singleton to track the balance."""
 
     _instance = None
+    _allow_construction = False
+
+    def __new__(cls):
+        if not cls._allow_construction:
+            raise RuntimeError(
+                "Balance is a singleton; use Balance.get_instance() instead of Balance()."
+            )
+        return super().__new__(cls)
 
     def __init__(self):
         """Initialize the balance. Prevent direct instantiation."""
@@ -17,7 +25,11 @@ class Balance:
     def get_instance(cls):
         """Return the single shared Balance instance, creating it if needed."""
         if cls._instance is None:
-            cls._instance = cls()
+            cls._allow_construction = True
+            try:
+                cls._instance = cls()
+            finally:
+                cls._allow_construction = False
         return cls._instance
 
     def register_observer(self, observer):
