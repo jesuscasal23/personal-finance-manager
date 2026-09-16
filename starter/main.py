@@ -26,16 +26,21 @@ def main():
         Transaction(75, TransactionCategory.EXPENSE),
     ]
 
-    # Create a couple of transactions via the TransactionFactory (Factory Method
-    # pattern) to show it producing the same Transaction objects the rest of the
-    # app already understands, e.g. from raw input like a CSV row or API payload.
+    # Create a couple of transactions via the TransactionFactory (Factory
+    # Method pattern) to show it producing the same Transaction objects the
+    # rest of the app already understands, e.g. from raw input like a CSV
+    # row or API payload.
     transactions.append(TransactionFactory.create_expense(120))
     transactions.append(
-        TransactionFactory.create_from_dict({"amount": 30, "category": "Income"})
+        TransactionFactory.create_from_dict(
+            {"amount": 30, "category": "Income"}
+        )
     )
 
     # Create an external income transaction (via Adapter pattern)
-    freelance_income = ExternalFreelanceIncome(1200, "INV-98765", "Mobile App Project")
+    freelance_income = ExternalFreelanceIncome(
+        1200, "INV-98765", "Mobile App Project"
+    )
     adapter = TransactionAdapter(freelance_income)
     adapted_transaction = adapter.to_transaction()
 

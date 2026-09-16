@@ -19,12 +19,15 @@ class TransactionFactory:
     @staticmethod
     def create_expense(amount):
         """Create an EXPENSE transaction."""
-        return TransactionFactory._create(amount, TransactionCategory.EXPENSE)
+        return TransactionFactory._create(
+            amount, TransactionCategory.EXPENSE
+        )
 
     @staticmethod
     def create_from_dict(data):
         """
-        Create a Transaction from a raw dict, e.g. {"amount": 50, "category": "Income"}.
+        Create a Transaction from a raw dict, e.g.
+        {"amount": 50, "category": "Income"}.
         Raises ValueError if the category is missing or unrecognized.
         """
         amount = data.get("amount")
@@ -32,17 +35,22 @@ class TransactionFactory:
 
         category = None
         for member in TransactionCategory:
-            if member.value == category_value or member.name == category_value:
+            if category_value in (member.value, member.name):
                 category = member
                 break
 
         if category is None:
-            raise ValueError(f"Unrecognized transaction category: {category_value!r}")
+            raise ValueError(
+                f"Unrecognized transaction category: {category_value!r}"
+            )
 
         return TransactionFactory._create(amount, category)
 
     @staticmethod
     def _create(amount, category):
         if amount is None or amount < 0:
-            raise ValueError(f"Transaction amount must be a non-negative number, got {amount!r}")
+            raise ValueError(
+                f"Transaction amount must be a non-negative number, "
+                f"got {amount!r}"
+            )
         return Transaction(amount, category)

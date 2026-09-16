@@ -12,7 +12,8 @@ class Balance:
     def __new__(cls):
         if not cls._allow_construction:
             raise RuntimeError(
-                "Balance is a singleton; use Balance.get_instance() instead of Balance()."
+                "Balance is a singleton; use Balance.get_instance() "
+                "instead of Balance()."
             )
         return super().__new__(cls)
 
@@ -23,7 +24,7 @@ class Balance:
 
     @classmethod
     def get_instance(cls):
-        """Return the single shared Balance instance, creating it if needed."""
+        """Return the single shared Balance instance, creating it."""
         if cls._instance is None:
             cls._allow_construction = True
             try:
@@ -33,11 +34,11 @@ class Balance:
         return cls._instance
 
     def register_observer(self, observer):
-        """Register an IBalanceObserver to be notified on balance changes."""
+        """Register an IBalanceObserver to be notified on changes."""
         self._observers.append(observer)
 
     def _notify_observers(self, transaction):
-        """Notify all registered observers of the latest balance and transaction."""
+        """Notify all registered observers of the latest balance."""
         for observer in self._observers:
             observer.update(self.get_balance(), transaction)
 
@@ -65,7 +66,9 @@ class Balance:
         elif transaction.category == TransactionCategory.EXPENSE:
             self.add_expense(transaction.amount)
         else:
-            raise ValueError(f"Unsupported transaction category: {transaction.category}")
+            raise ValueError(
+                f"Unsupported transaction category: {transaction.category}"
+            )
 
         self._notify_observers(transaction)
 
